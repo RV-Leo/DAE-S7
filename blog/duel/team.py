@@ -45,14 +45,14 @@ def q5():
 
 def q6():
     """Los artículos escritos por autores de Perú (publicados o no)."""
-    raise NotImplementedError
+    return Post.objects.filter(author__profile__country="Perú")
 
 
 def q7():
     """Los comentarios de los artículos de la categoría «Tecnología»."""
-    raise NotImplementedError
+    return Comment.objects.filter(post__category__name="Tecnología")
 
 
 def q8():
     """Los autores que nunca han publicado un artículo."""
-    raise NotImplementedError
+    return Author.objects.filter(posts=None)

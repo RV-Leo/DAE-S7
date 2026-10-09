@@ -1,6 +1,13 @@
 from django.db import models
 
 
+class PublishedManager(models.Manager):
+    """Only return posts that have been published."""
+
+    def get_queryset(self):
+        return super().get_queryset().filter(published=True)
+
+
 class Author(models.Model):
     name = models.CharField(max_length=100)
 
@@ -37,6 +44,9 @@ class Tag(models.Model):
 
 
 class Post(models.Model):
+    objects = PublishedManager()
+    all_objects = models.Manager()
+
     title = models.CharField(max_length=200)
     body = models.TextField(blank=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="posts")

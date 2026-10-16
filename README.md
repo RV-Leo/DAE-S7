@@ -1,27 +1,22 @@
-# DAE-S7: ORM en Django — Laboratorio S07
+# ORM con IA duelo y verificador
 
-## Desarrollo de Aplicaciones Empresariales — 4-C24-A
+## Contexto
 
-### Paso 1 — Estructura del proyecto
+Laboratorio DAE S07 Extra de Desarrollo de Aplicaciones Empresariales. El proyecto compara consultas ORM escritas por el estudiante con respuestas de IA, verifica resultados y coste mediante un duelo automático, y demuestra límites seguros para las acciones que una aplicación puede ejecutar a partir de una intención.
 
-- Proyecto Django `config/` con `manage.py`.
-- App `blog` declarada en `INSTALLED_APPS`.
-- Pillow instalado en `requirements.txt`.
-- Plantillas configuradas con `DIRS` apuntando a cada `templates/` de las apps.
-- Archivos estáticos configurados (`STATIC_URL = "static/"`).
+## Tecnologías usadas
 
-### Paso 2 — Modelos y migraciones
+- Python 3.11.9 en el entorno de este equipo (el laboratorio recomienda Python 3.12 o superior).
+- Django 5.2.18.
+- SQLite para desarrollo y pruebas.
+- Git y GitHub.
 
-Modelos declarados en `blog/models.py`:
+## Estructura del proyecto
 
-| Modelo      | Campo clave                                  | Relación        |
-|-------------|-----------------------------------------------|-----------------|
-| Author      | `name`                                        | —               |
-| Profile     | `author` (OneToOne), `country`, `bio`         | Uno a uno       |
-| Category    | `name` (unique)                               | —               |
-| Tag         | `name` (unique)                               | —               |
-| Post        | `title`, `body`, `published`, `published_at`  | ForeignKey a Author y Category; ManyToMany a Tag |
-| Comment     | `author_name`, `text`, `created_at`           | ForeignKey a Post |
-
-Migración `0001_initial.py` generada y aplicada correctamente.
-Seed cargado: 4 autores, 15 artículos, 23 comentarios.
+- `config/`: configuración y rutas del proyecto Django.
+- `blog/models.py`: modelos de autores, perfiles, categorías, artículos, etiquetas y comentarios.
+- `blog/duel/`: preguntas, respuestas de referencia de IA, respuestas del equipo y verificador.
+- `blog/agent/`: adaptador del modelo y registro cerrado de acciones.
+- `blog/queries.py`: consulta optimizada para la portada.
+- `blog/management/commands/`: comandos `seed_blog`, `duel` y `agent`.
+- `blog/tests/`: pruebas de datos, consultas, duelo y frontera de seguridad.

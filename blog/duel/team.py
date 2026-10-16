@@ -18,41 +18,47 @@ from blog.models import Author, Category, Comment, Post, Profile, Tag  # noqa: F
 
 
 def q1():
-    """Los artículos que ya están publicados."""
-    raise NotImplementedError
+    """Return published posts."""
+    return Post.objects.filter(published=True)
 
 
 def q2():
-    """Los artículos que no tienen categoría asignada."""
-    raise NotImplementedError
+    """Return posts without a category."""
+    return Post.objects.filter(category__isnull=True)
 
 
 def q3():
-    """Los artículos publicados entre el 1 de marzo y el 31 de mayo de 2026, ambos días incluidos."""
-    raise NotImplementedError
+    """Return posts published during March through May 2026, inclusive."""
+    return Post.objects.filter(published_at__range=(date(2026, 3, 1), date(2026, 5, 31)))
 
 
 def q4():
-    """Los artículos con más de dos comentarios."""
-    raise NotImplementedError
+    """Return posts with more than two comments."""
+    return Post.objects.annotate(n_comments=Count("comments")).filter(n_comments__gt=2)
 
 
 def q5():
-    """Los tres artículos publicados con más comentarios; de cada uno, cuántos comentarios
-    (`n_comments`) y cuántas etiquetas (`n_tags`)."""
-    raise NotImplementedError
+    """Return the top three published posts with comment and tag counts."""
+    return (
+        Post.objects.filter(published=True)
+        .annotate(
+            n_comments=Count("comments", distinct=True),
+            n_tags=Count("tags", distinct=True),
+        )
+        .order_by("-n_comments")[:3]
+    )
 
 
 def q6():
-    """Los artículos escritos por autores de Perú (publicados o no)."""
+    """Return posts written by authors from Peru, published or not."""
     return Post.objects.filter(author__profile__country="Perú")
 
 
 def q7():
-    """Los comentarios de los artículos de la categoría «Tecnología»."""
+    """Return comments on posts in the Technology category."""
     return Comment.objects.filter(post__category__name="Tecnología")
 
 
 def q8():
-    """Los autores que nunca han publicado un artículo."""
-    return Author.objects.filter(posts=None)
+    """Return authors who have never published a post."""
+    return Author.objects.exclude(posts__published=True)

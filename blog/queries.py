@@ -7,6 +7,6 @@ def posts_for_front_page():
     return (
         Post.objects.filter(published=True)
         .order_by("-published_at")
-        .select_related("author")
+        .select_related("author", "category")
         .prefetch_related("tags")
     )
